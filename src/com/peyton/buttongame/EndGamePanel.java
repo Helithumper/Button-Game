@@ -44,7 +44,7 @@ public class EndGamePanel extends JFrame implements ActionListener {
 		// Button1: Retry
 		retryButton = new JButton("Retry?");
 		retryButton.addActionListener(this);
-		
+
 		retryPanel = new JPanel();
 		retryPanel.add(retryButton);
 		add(retryPanel);
@@ -63,21 +63,19 @@ public class EndGamePanel extends JFrame implements ActionListener {
 	}
 
 	// AM
-	
 
 	// Methods
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==retryButton){
+		if (e.getSource() == retryButton) {
 			setVisible(false);
 			new GamePanel(level);
-		}
-		else if(e.getSource()==advanceButton){
+		} else if (e.getSource() == advanceButton) {
 			setVisible(false);
-			new GamePanel(level+1);
+			new GamePanel(level + 1);
 		}
 	}
-	
+
 	// toString
 }
