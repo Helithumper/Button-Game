@@ -14,48 +14,104 @@ public class EndGamePanel extends JFrame implements ActionListener {
 
 	private int level;
 	private String completedTime;
-	private JLabel levelLabel, timeLabel;
+	private JLabel levelLabel, timeLabel, bestLabel, beatLabel;
 	private JButton retryButton, advanceButton;
-	private JPanel levelPanel, timePanel, retryPanel, advancePanel;
+	private JPanel levelPanel, timePanel, retryPanel, advancePanel, bestPanel, beatPanel;
 
 	// constructor
 	public EndGamePanel(int level, String completedTime) {
 		this.level = level;
 		this.completedTime = completedTime;
 
-		setLayout(new GridLayout(4, 1));
+		if (!isLoser()) {
+			ButtonGameMain.timeHandle.addBestTime(completedTime, level);
 
-		// TextLine1: Level Number + "Completed"
-		levelLabel = new JLabel("Level " + level + " Completed!");
-		levelLabel.setFont(ButtonGameMain.TEXT_FONT);
+			setLayout(new GridLayout(5, 1));
 
-		levelPanel = new JPanel();
-		levelPanel.add(levelLabel);
-		add(levelPanel);
+			// TextLine1: Level Number + "Completed"
+			levelLabel = new JLabel(
+					"<html><font color = 'blue'>Level <font color = 'red'>"
+							+ level + "<font color = 'blue'> Completed!<html>");
+			levelLabel.setFont(ButtonGameMain.TEXT_FONT);
 
-		// TextLine2: Time Completed
-		timeLabel = new JLabel("Time Completed: " + completedTime);
-		timeLabel.setFont(ButtonGameMain.TEXT_FONT);
+			levelPanel = new JPanel();
+			levelPanel.add(levelLabel);
+			add(levelPanel);
+			// TextLine2: Time Completed
+			timeLabel = new JLabel(
+					"<html><font color = 'blue'>Time Completed: <font color = 'red'>"
+							+ completedTime + "</html>");
+			timeLabel.setFont(ButtonGameMain.TEXT_FONT);
 
-		timePanel = new JPanel();
-		timePanel.add(timeLabel);
-		add(timePanel);
+			timePanel = new JPanel();
+			timePanel.add(timeLabel);
+			add(timePanel);
 
-		// Button1: Retry
-		retryButton = new JButton("Retry?");
-		retryButton.addActionListener(this);
+			// TextLine3: Best Time
+			bestLabel = new JLabel(
+					"<html><font color = 'blue'>Best Time: <font color = 'red'>"
+							+ ButtonGameMain.timeHandle.getBestTime(level)
+							+ "</html>");
+			bestLabel.setFont(ButtonGameMain.TEXT_FONT);
 
-		retryPanel = new JPanel();
-		retryPanel.add(retryButton);
-		add(retryPanel);
+			bestPanel = new JPanel();
+			bestPanel.add(bestLabel);
+			add(bestPanel);
+			// Button1: Retry
+			retryButton = new JButton("Retry?");
+			retryButton.addActionListener(this);
 
-		// Button2: Advance to Next Level
-		advanceButton = new JButton("Advance to Next Level?");
-		advanceButton.addActionListener(this);
+			retryPanel = new JPanel();
+			retryPanel.add(retryButton);
+			add(retryPanel);
 
-		advancePanel = new JPanel();
-		advancePanel.add(advanceButton);
-		add(advancePanel);
+			// Button2: Advance to Next Level
+			advanceButton = new JButton("Advance to Next Level?");
+			advanceButton.addActionListener(this);
+
+			advancePanel = new JPanel();
+			advancePanel.add(advanceButton);
+			add(advancePanel);
+		} else {
+			setLayout(new GridLayout(4, 1));
+			
+			//LevelLabel
+			levelLabel = new JLabel("YOU LOST!");
+			levelLabel.setFont(ButtonGameMain.TEXT_FONT);
+
+			levelPanel = new JPanel();
+			levelPanel.add(levelLabel);
+			add(levelPanel);
+			
+			//Time Label
+			timeLabel = new JLabel(
+					"<html><font color = 'blue'>Time Completed: <font color = 'red'>"
+							+ completedTime + "</html>");
+			timeLabel.setFont(ButtonGameMain.TEXT_FONT);
+
+			timePanel = new JPanel();
+			timePanel.add(timeLabel);
+			add(timePanel);
+			
+			
+			//Time You need to beat:
+			beatLabel = new JLabel("<html><font color = 'blue'>Goal: <font color = 'red'>"
+							+ ((double)((.404 * level) + 9.596)) + " Seconds</html>");
+			beatLabel.setFont(ButtonGameMain.TEXT_FONT);
+			
+			beatPanel = new JPanel();
+			beatPanel.add(beatLabel);
+			add(beatPanel);
+			
+			//Retry Button
+			retryButton = new JButton("Retry?");
+			retryButton.addActionListener(this);
+
+			retryPanel = new JPanel();
+			retryPanel.add(retryButton);
+			add(retryPanel);
+
+		}
 
 		setLocationRelativeTo(null);
 		pack();
@@ -75,6 +131,14 @@ public class EndGamePanel extends JFrame implements ActionListener {
 			setVisible(false);
 			new GamePanel(level + 1);
 		}
+	}
+
+	private boolean isLoser() {
+		if (level < 100) {
+			return Double.parseDouble(completedTime.split(" ")[0]) > (.404 * level) + 9.596;
+		}
+		else{return Double.parseDouble(completedTime.split(" ")[0]) > (level*10) /20;}
+
 	}
 
 	// toString

@@ -19,10 +19,16 @@ public class GamePanel extends JFrame implements ActionListener {
 	private JButton clickButton;
 	private int goal;
 	private int level;
+	private String endTimeFormatted;
+	private long startTime = 0l, endTime = 0l;
 
 	public GamePanel(int level) {
+		//Init of Variables
 		this.level = level;
 		goal = level * 10;
+		startTime = System.nanoTime();
+		
+		//Init format of Window
 		setLayout(new BorderLayout());
 		setMinimumSize(new Dimension(1000, 175));
 
@@ -55,9 +61,11 @@ public class GamePanel extends JFrame implements ActionListener {
 			if (progBar.getValue() < goal - 1) {
 				progBar.setValue(progBar.getValue() + 1);
 			} else {
+				endTime = System.nanoTime()-startTime;
+				endTimeFormatted = Double.toString((double) (endTime/1000000000.0)) + " Seconds";
 				progBar.setValue(progBar.getValue() + 1);
 				setVisible(false);
-				new EndGamePanel(level, "00:00:00");
+				new EndGamePanel(level, endTimeFormatted);
 			}
 		}
 
