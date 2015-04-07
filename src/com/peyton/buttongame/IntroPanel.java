@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class IntroPanel extends JFrame implements ActionListener {
-	private final Font textFont = new Font("Serif", Font.BOLD, 16);
 	private JLabel title, instructions;
 	private JTextField inputField;
 	private JButton enterButton;
@@ -23,7 +22,7 @@ public class IntroPanel extends JFrame implements ActionListener {
 
 		// Title
 		title = new JLabel("<html><font color = 'blue'>Button Game v01</html>");
-		title.setFont(textFont);
+		title.setFont(ButtonGameMain.TEXT_FONT);
 		JPanel titlePanel = new JPanel();
 		titlePanel.add(title);
 		add(titlePanel);
@@ -31,7 +30,7 @@ public class IntroPanel extends JFrame implements ActionListener {
 		// Directions
 		instructions = new JLabel(
 				"<html><font color = 'blue'>Please Enter Your Level</html>");
-		instructions.setFont(textFont);
+		instructions.setFont(ButtonGameMain.TEXT_FONT);
 		JPanel instructionsPanel = new JPanel();
 		instructionsPanel.add(instructions);
 		add(instructionsPanel);
@@ -39,6 +38,7 @@ public class IntroPanel extends JFrame implements ActionListener {
 		// Input box
 		inputField = new JTextField();
 		inputField.setColumns(3);
+		inputField.addActionListener(this);
 		JPanel inputPanel = new JPanel();
 		inputPanel.add(inputField);
 		add(inputPanel);
@@ -56,15 +56,9 @@ public class IntroPanel extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == enterButton) {
-			if (isValidInteger(inputField.getText())) {
-				//System.out.println("MAKING GAME WITH: " + inputField.getText());
-				new GamePanel(Integer.parseInt(inputField.getText()));
-			} else {
-				JOptionPane.showMessageDialog(new JFrame(), "\"" + inputField.getText() + "\"" + " Is not a valid integer", "Input Error", JOptionPane.ERROR_MESSAGE);
-			}
+		if (e.getSource() == enterButton || e.getSource() == inputField) {
+			buttonAct(inputField.getText());
 		}
-
 	}
 
 	private boolean isValidInteger(String i) {
@@ -77,5 +71,17 @@ public class IntroPanel extends JFrame implements ActionListener {
 		}
 		// only got here if we didn't return false
 		return true;
+	}
+
+	private void buttonAct(String text) {
+		if (isValidInteger(text)) {
+			// System.out.println("MAKING GAME WITH: " + inputField.getText());
+			setVisible(false);
+			new GamePanel(Integer.parseInt(text));
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "\"" + text + "\""
+					+ " Is not a valid integer", "Input Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
