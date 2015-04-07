@@ -8,18 +8,23 @@ public class TimeHandler {
 
 	// Constructor
 	public TimeHandler() {
-		for(int i = 0; i < 10000; i++){
-			times.add(10000000000000.0);
-		}
+
 	}
 
 	// Methods
 	public void addBestTime(String time, int level) {
-
+		if (level > times.size()) {
+			for (int i = level - times.size(); i > 0; i--) {
+				System.out.println(i);
+				times.add(-1.1);
+			}
+		}
 		String timeinString = time.split(" ")[0];
 		double actualTime = Double.parseDouble(timeinString);
 		System.out.println("Actual Time: " + actualTime);
-		if (times.get(level - 1) > actualTime) {
+		if (times.get(level - 1) == -1.1) {
+			times.set(level - 1, actualTime);
+		} else if (times.get(level - 1) > actualTime) {
 			times.set(level - 1, actualTime);
 		}
 	}
