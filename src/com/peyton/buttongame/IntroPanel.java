@@ -1,9 +1,10 @@
 package com.peyton.buttongame;
 
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,26 +13,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class IntroPanel extends JFrame implements ActionListener {
+public class IntroPanel extends JFrame implements ActionListener, KeyListener {
 	private JLabel title, instructions;
 	private JTextField inputField;
 	private JButton enterButton;
+	private JPanel titlePanel, instructionsPanel, inputPanel, buttonPanel;
 
 	public IntroPanel() {
+		initializeFrame();
+	}
+	
+	public void initializeFrame(){
 		setLayout(new GridLayout(4, 1));
 
 		// Title
 		title = new JLabel("<html><font color = 'blue'>Button Game v01</html>");
 		title.setFont(ButtonGameMain.TEXT_FONT);
-		JPanel titlePanel = new JPanel();
+		titlePanel = new JPanel();
 		titlePanel.add(title);
 		add(titlePanel);
 
 		// Directions
 		instructions = new JLabel(
-				"<html><font color = 'blue'>Please Enter Your Level</html>");
+				"<html><font color = 'blue'>Please Enter A Level Between 1 and 100</html>");
 		instructions.setFont(ButtonGameMain.TEXT_FONT);
-		JPanel instructionsPanel = new JPanel();
+		instructionsPanel = new JPanel();
 		instructionsPanel.add(instructions);
 		add(instructionsPanel);
 
@@ -39,14 +45,15 @@ public class IntroPanel extends JFrame implements ActionListener {
 		inputField = new JTextField();
 		inputField.setColumns(3);
 		inputField.addActionListener(this);
-		JPanel inputPanel = new JPanel();
+		inputField.addKeyListener(this);
+		inputPanel = new JPanel();
 		inputPanel.add(inputField);
 		add(inputPanel);
 
 		// Button
 		enterButton = new JButton("Enter");
 		enterButton.addActionListener(this);
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.add(enterButton);
 		add(buttonPanel);
 
@@ -74,14 +81,37 @@ public class IntroPanel extends JFrame implements ActionListener {
 	}
 
 	private void buttonAct(String text) {
-		if (isValidInteger(text)) {
+		if (isValidInteger(text) && Integer.parseInt(text) <= 100
+				&& Integer.parseInt(text) >= 1) {
 			// System.out.println("MAKING GAME WITH: " + inputField.getText());
 			setVisible(false);
 			new GamePanel(Integer.parseInt(text));
 		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "\"" + text + "\""
-					+ " Is not a valid integer", "Input Error",
-					JOptionPane.ERROR_MESSAGE);
+			throwErrorBox("\"" + text + "\""
+					+ " Is not a valid level between 1 and 100", "Input Error");
 		}
+	}
+
+	private void throwErrorBox(String message, String title) {
+		JOptionPane.showMessageDialog(new JFrame(), message, title,
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		buttonAct(inputField.getText());
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
