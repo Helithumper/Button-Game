@@ -69,16 +69,16 @@ public class GamePanel extends JFrame implements ActionListener, KeyListener {
 		return;
 	}
 
-	private void incrementProgress() {
-		progBar.setValue(progBar.getValue() + 1);
+	private void incrementProgress(int amtToAdd) {
+		progBar.setValue(progBar.getValue() + amtToAdd);
 	}
 
 	private void act() {
 		if (progBar.getValue() < goal - 1) {
-			incrementProgress();
+			incrementProgress(1);
 		} else {
 			stopTime();
-			incrementProgress();
+			incrementProgress(1);
 			setVisible(false);
 			new EndGamePanel(level, endTimeFormatted);
 		}

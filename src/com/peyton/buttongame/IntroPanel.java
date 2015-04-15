@@ -45,7 +45,7 @@ public class IntroPanel extends JFrame implements ActionListener, KeyListener {
 		inputField = new JTextField();
 		inputField.setColumns(3);
 		inputField.addActionListener(this);
-		inputField.addKeyListener(this);
+		//ks;fllpinputField.addKeyListener(this);
 		inputPanel = new JPanel();
 		inputPanel.add(inputField);
 		add(inputPanel);
@@ -87,15 +87,12 @@ public class IntroPanel extends JFrame implements ActionListener, KeyListener {
 			setVisible(false);
 			new GamePanel(Integer.parseInt(text));
 		} else {
-			throwErrorBox("\"" + text + "\""
+			ButtonGameMain.throwErrorBox("\"" + text + "\""
 					+ " Is not a valid level between 1 and 100", "Input Error");
 		}
 	}
 
-	private void throwErrorBox(String message, String title) {
-		JOptionPane.showMessageDialog(new JFrame(), message, title,
-				JOptionPane.ERROR_MESSAGE);
-	}
+	
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
